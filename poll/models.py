@@ -26,5 +26,18 @@ class Choice(models.Model):
     def __str__(self):
         return self.choice_text
 
+class User(models.Model):
+    union_id = models.CharField(max_length=400)
+    headimgurl = models.CharField(max_length=1000)
+    openid = models.CharField(max_length=400)
+    nickname = models.CharField(max_length=200)
+    sex = models.CharField(max_length=10) #1 for male, 2 for female, 0 for known
+    city = models.CharField(max_length=20)
+    country = models.CharField(max_length=50)
+
+
+
+
+
 
 

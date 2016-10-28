@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_db_prefix',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -78,10 +79,10 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test',
-        'USER': 'root',
-        'PASSWORD': '123456',
-        'HOST': '127.0.0.1',
+        'NAME': 'livhong',
+        'USER': 'livhong',
+        'PASSWORD': 'b5qr3nh2',
+        'HOST': 'sql.m88.vhostgo.com',
         'PORT': '3306',
     }
 }
@@ -119,6 +120,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+#####################################
+##DB prefix
+DB_PREFIX = "vote_"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
