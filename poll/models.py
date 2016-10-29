@@ -2,7 +2,8 @@ import datetime
 
 from django.db import models
 from django.utils import timezone
-
+from DjangoUeditor.models import UEditorField
+from vote.managers import VotableManager
 
 # Create your models here.
 # model for question
@@ -35,9 +36,35 @@ class User(models.Model):
     city = models.CharField(max_length=20)
     country = models.CharField(max_length=50)
 
+class ActivityDetail(models.Model):
+    #投稿方式可以编写在这里
+    content = UEditorField(default="", toolbars="full", imagePath="ueditor/images/%(year)s/%(month)s/",
+                           filePath="ueditor/file/%(year)s/%(month)s/")
 
+class Building(models.Model):
+    title = models.CharField(max_length=1000)
+    avator = models.ImageField(upload_to='building/%Y/%m/')
+    description = models.CharField(max_length=1000)
+    abstract = models.TextField()
+    content = UEditorField(default="", toolbars="full", imagePath="ueditor/images/%(year)s/%(month)s/",
+                           filePath="ueditor/file/%(year)s/%(month)s/")
 
+class Questionnaire(models.Model):
+    title = models.CharField(max_length=1000)
+    cover_img = models.ImageField(upload_to='')
+    content = UEditorField(default="", toolbars="full", imagePath="ueditor/images/%(year)s/%(month)s/",
+                           filePath="ueditor/file/%(year)s/%(month)s/")
+    building = models.ForeignKey(Building)
+    is_online = models.BooleanField(default=False)
 
-
+class Option(models.Model):
+    avator = models.ImageField(upload_to='option/%Y/%m/')
+    abstract = models.TextField()
+    description = models.CharField(max_length=1000)
+    pub_time = models.DateField()
+    content = UEditorField(default="", toolbars="full", imagePath="ueditor/images/%(year)s/%(month)s/",
+                           filePath="ueditor/file/%(year)s/%(month)s/")
+    votes = VotableManager()
+    questionnaire = models.ForeignKey(Questionnaire)
 
 

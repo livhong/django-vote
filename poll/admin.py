@@ -1,7 +1,9 @@
 from django.contrib import admin
 
-from .models import Question, Choice
+from .models import *
 
+def register(model, modelAdmin=None):
+    admin.site.register(model, modelAdmin)
 
 class ChoiceInline(admin.TabularInline):
     model = Choice
@@ -19,7 +21,23 @@ class QuestionAdmin(admin.ModelAdmin):
     search_fields = ['question_text']
     inlines = [ChoiceInline]
 
+class OptionInline(admin.TabularInline):
+    model = Option
+    extra = 1
+
+class QuestionnaireInline(admin.TabularInline):
+    model = Questionnaire
+    extra = 1
+
+class QuestionnaireAdmin(admin.ModelAdmin):
+    inlines = [OptionInline]
+
+class BuildingAdmin(admin.ModelAdmin):
+    inlines = [QuestionnaireInline]
 
 admin.site.register(Question, QuestionAdmin)
-
+register(ActivityDetail)
+register(Building, BuildingAdmin)
+register(Questionnaire, QuestionnaireAdmin)
+register(Option)
 
