@@ -10,25 +10,34 @@
 </head>
 <body>
 
-<div>
-    activity content detail
-</div>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 <div>
-    <div>title</div>
-    <div>
-        description description description
-    </div>
-    <div>
-        <img src="" alt="cover_img">
-    </div>
-    <div>
-        abstract abstract abstract abstract
-    </div>
-    <div>
-        共13份投稿
-    </div>
+    {{ activity.content | safe}}
 </div>
+
+{% for building in buildings %}
+
+    <div>
+        <div>{{ building.title }}</div>
+        <div>
+            {{ building.description }}
+        </div>
+        <div>
+            <a href="{% url 'polls:option' building.id %}">
+                <img src="{{ building.avator.url }}" alt="cover_img" style="width: 100%">
+            </a>
+        </div>
+        <div>
+            {{ building.abstract }}
+        </div>
+        <div>
+            共{{ building.option_count }}份投稿
+        </div>
+    </div>
+
+{% endfor %}
+
 
 </body>
 </html>

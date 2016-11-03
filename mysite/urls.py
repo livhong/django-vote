@@ -17,10 +17,14 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 
 admin.site.site_header = '投票系统'
 
 urlpatterns = [
     url(r'^polls/', include('poll.urls', namespace="polls")),
+    url(r'^wx/', include('wx.urls', namespace='wx')),
     url(r'^admin/', admin.site.urls),
-]
+    url(r'^ueditor/', include('DjangoUeditor.urls' )),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

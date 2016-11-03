@@ -28,7 +28,8 @@ class Choice(models.Model):
         return self.choice_text
 
 class User(models.Model):
-    union_id = models.CharField(max_length=400)
+
+    unionid = models.CharField(max_length=400)
     headimgurl = models.CharField(max_length=1000)
     openid = models.CharField(max_length=400)
     nickname = models.CharField(max_length=200)
@@ -48,14 +49,16 @@ class Building(models.Model):
     abstract = models.TextField()
     content = UEditorField(default="", toolbars="full", imagePath="ueditor/images/%(year)s/%(month)s/",
                            filePath="ueditor/file/%(year)s/%(month)s/")
-
-class Questionnaire(models.Model):
-    title = models.CharField(max_length=1000)
-    cover_img = models.ImageField(upload_to='')
-    content = UEditorField(default="", toolbars="full", imagePath="ueditor/images/%(year)s/%(month)s/",
-                           filePath="ueditor/file/%(year)s/%(month)s/")
-    building = models.ForeignKey(Building)
+    banner_img = models.ImageField(upload_to='', default="")
     is_online = models.BooleanField(default=False)
+    option_count = models.IntegerField(default=0)
+# class Questionnaire(models.Model):
+#     title = models.CharField(max_length=1000)
+#
+#     content = UEditorField(default="", toolbars="full", imagePath="ueditor/images/%(year)s/%(month)s/",
+#                            filePath="ueditor/file/%(year)s/%(month)s/")
+#     building = models.OneToOneField(Building)
+
 
 class Option(models.Model):
     avator = models.ImageField(upload_to='option/%Y/%m/')
@@ -65,6 +68,6 @@ class Option(models.Model):
     content = UEditorField(default="", toolbars="full", imagePath="ueditor/images/%(year)s/%(month)s/",
                            filePath="ueditor/file/%(year)s/%(month)s/")
     votes = VotableManager()
-    questionnaire = models.ForeignKey(Questionnaire)
+    building = models.ForeignKey(Building)
 
 

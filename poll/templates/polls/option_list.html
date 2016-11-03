@@ -10,28 +10,26 @@
 </head>
 <body>
 
-<div>
-    building content detail
-</div>
+{% for option in options %}
 
-<div>
-    <div>title</div>
+    <div>{{ option.title }}</div>
+    <div>{{ option.pub_time }}</div>
     <div>
-        description description description
+        {{ option.description }}
     </div>
     <div>
-        <img src="" alt="cover_img">
+        {{ option.content | safe}}
     </div>
     <div>
-        abstract abstract abstract abstract
+        共{{ option.votes.count }}票
     </div>
     <div>
-        共13票
+        <button>
+            投他一票
+        </button>
     </div>
-    <div>
-        <button>投他一票</button>
-    </div>
-</div>
+
+{% endfor %}
 
 </body>
 </html>

@@ -21,23 +21,29 @@ class QuestionAdmin(admin.ModelAdmin):
     search_fields = ['question_text']
     inlines = [ChoiceInline]
 
-class OptionInline(admin.TabularInline):
+class OptionInline(admin.StackedInline):
     model = Option
     extra = 1
+    # classes =['collapse']
+    class Media:
+        js = (
+            'http://cdn.bootcss.com/jquery/2.2.4/jquery.min.js',
+            '/static/js/inlinecollapsed.js',
+        )
 
-class QuestionnaireInline(admin.TabularInline):
-    model = Questionnaire
-    extra = 1
+# class QuestionnaireInline(admin.TabularInline):
+#     model = Questionnaire
+#     extra = 1
 
-class QuestionnaireAdmin(admin.ModelAdmin):
-    inlines = [OptionInline]
+# class QuestionnaireAdmin(admin.ModelAdmin):
+#     inlines = [OptionInline]
 
 class BuildingAdmin(admin.ModelAdmin):
-    inlines = [QuestionnaireInline]
+    inlines = [OptionInline]
 
 admin.site.register(Question, QuestionAdmin)
 register(ActivityDetail)
 register(Building, BuildingAdmin)
-register(Questionnaire, QuestionnaireAdmin)
+# register(Questionnaire, QuestionnaireAdmin)
 register(Option)
 

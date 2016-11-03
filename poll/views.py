@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Question, Choice
+from .models import *
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.utils import timezone
-
+from wx.base_view import InterceptorView as BaseView
+from .serializer import UserSerializer
 
 # Create your views here.
 def index(request):
@@ -39,6 +40,9 @@ def vote(request, question_id):
     # success deal with post data always return HttpResponseRedirect, prevent user submit twice
     return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
 
+def test(request):
+    context = {'days': [1,1,1,2,3,4,4,4,5,6]}
+    return render(request, 'polls/test.html', context)
 
 # ListView represent display a list of objects
 class IndexView(generic.ListView):
@@ -62,5 +66,44 @@ class DetailView(generic.DetailView):
 class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
+
+class BuildingView(BaseView):
+    def get(self, request):
+        # userStr = request.session['user']
+        # user = UserSerializer.parse(userStr)
+        buildings = Building.objects.filter(is_online=True)
+        activity = ActivityDetail.objects.filter().order_by('-id')[0]
+        return render(request, 'polls/building.html', {
+            'buildings':buildings,
+            'activity': activity
+        })
+
+class OptionListView(BaseView):
+    def get(self, request, building_id):
+        options = Option.objects.filter().order_by('-pub_time')
+        return render(request, 'polls/option_list.html', {
+            'options': options,
+            'building_id': building_id
+        })
+
+
+
+class RankListView(BaseView):
+    def get(self, request):
+        pass
+
+
+def raise_option(request, option_id):
+    userStr = request.session['user']
+    user = UserSerializer.parse(userStr)
+    p = get_object_or_404(Option, pk=option_id)
+    if p.votes.exists(user.id):
+        return render(request, 'polls/building.html', {
+            'building': p.building,
+            'error_message': "您已经选过这个选项"
+        })
+    p.votes.up(user.id)
+    return HttpResponseRedirect(reverse('polls:option_list', args=(p.building.id)))
+
 
 
