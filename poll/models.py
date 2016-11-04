@@ -51,6 +51,7 @@ class Building(models.Model):
                            filePath="ueditor/file/%(year)s/%(month)s/")
     banner_img = models.ImageField(upload_to='', default="")
     is_online = models.BooleanField(default=False)
+    is_after_ddl = models.BooleanField(default=False)
     option_count = models.IntegerField(default=0)
 # class Questionnaire(models.Model):
 #     title = models.CharField(max_length=1000)

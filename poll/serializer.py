@@ -15,8 +15,8 @@ class UserSerializer():
             'country': data['country'],
             'id': data['id']
         }
-        if 'unionid' in data:
-            user_data.update('unionid', data.unionid)
+        # if 'unionid' in data:
+        #     user_data.update('unionid', data.unionid)
         user = User(**user_data)
         return user
 

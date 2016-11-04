@@ -12,8 +12,9 @@ urlpatterns = [
     # ex:/polls/5/vote/
     url(r'^(?P<question_id>[0-9]+)/vote/$', views.vote, name='vote'),
     url(r'test/$', views.test, name='test'),
+
     url(r'^buildings/$', views.BuildingView.as_view(), name='building'),
     url(r'^(?P<building_id>[0-9]+)/options/$', views.OptionListView.as_view(), name='option_list'),
-    url(r'^(?P<building_id>[0-9]+)/options/$', views.OptionListView.as_view(), name='option_list'),
+    # url(r'^(?P<building_id>[0-9]+)/options/$', views.OptionListView.as_view(), name='option_list'),
 
 ]
