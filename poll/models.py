@@ -62,8 +62,10 @@ class Building(models.Model):
 
 
 class Option(models.Model):
+    title = models.CharField(max_length=1000, default='')
     avator = models.ImageField(upload_to='option/%Y/%m/')
     abstract = models.TextField()
+    author = models.CharField(max_length=50, default='')
     description = models.CharField(max_length=1000)
     pub_time = models.DateField()
     content = UEditorField(default="", toolbars="full", imagePath="ueditor/images/%(year)s/%(month)s/",

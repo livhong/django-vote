@@ -25,7 +25,10 @@ SECRET_KEY = '!k*0bb+j-pt+s2iqy9bgpvngs(p@i3a@$=&=z5r(f2gh^^bse%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'dev.weixin.tunnel.2bdata.com',
+    'localhost'
+]
 
 
 # Application definition
@@ -70,6 +73,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'debug': DEBUG,
         },
     },
 ]
