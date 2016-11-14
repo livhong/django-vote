@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Article</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="static/materialize/js/materialize.js"></script>
+
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+
+<body style="margin: 0; background-color: beige;">
+<nav id="main-navbar" class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin: 0;">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display-->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-9">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+
+            </button>
+            <a class="navbar-brand hidden-sm" href="{% url 'polls:detail' building.id %}" style="font-size: 130%;" ><span class="glyphicon glyphicon-chevron-left"></span></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="{% url 'polls:sort_by_time' building.id %}"><div style="display: inline-block; text-align: center;"><br class="nl"> 按发表时间排行</div></a></li>
+                <li><a href="#"><div style="display: inline-block; text-align: center;"><br class="nl"> 按热度排行</div></a></li>
+                <li><a href="#"><div style="display: inline-block; text-align: center;"><br class="nl"> </div></a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div id="articleDiv" style="clear: both; padding: 3px 1.5%;">
+    <div style="font-size: 100%; margin-top: 7px; margin-bottom: 7px; padding-left: 10px;">
+        作者:{{ article.author }}
+    </div>
+    <hr style="margin: 0;">
+    <div style="padding-bottom: 5px; margin-top: 5px;">
+        <div style="font-size: 120%; margin-left: 10px;">{{ article.title }}</div>
+        <div style="float: right;">{{ article.pub_time }}</div>
+        <hr>
+        <p style="clear:both; font-size: 100%; color: darkgray;">{{ article.content | safe }}</p>
+    </div>
+    <div class="result" style="vertical-align: baseline;">
+        <input class="voteButton"  name="button" id="{{ article.id }}"
+                {% if isVoted %}
+               type="button"
+               value="已投过"
+               disabled
+                {% else %}
+               type="image" src="/static/img/vote.png"
+               style=" height: 25px;display: inline-block;"
+                {% endif %}/><!-- 投票按钮,如果已经投过则失效 -->
+        <span style="font-size: medium;">
+            <span class="voteNum">{{ article.votes.count }}</span>票
+        </span>
+    </div>
+</div>
+<script>
+    $(".voteButton").click(function () {
+        var parent = $(this).parent();
+        $.get("/polls/" + $(this).attr("id") + "/outVote",
+                {}, function (txt) {
+
+                    var temp = '<input type="button" value="已投过" class="voteButton"  name="button" ' +
+                            'id="' + $(this).attr("id") + '"' +
+                            'value="已投过"disabled/>' +
+                            ' <span style="font-size: medium;"> <span class="voteNum">'+ txt +'</span>票</span>';
+                    parent.html(temp);
+                });
+    });
+</script>
+</body>
+
+</html>
