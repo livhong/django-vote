@@ -2727,11 +2727,12 @@ video.responsive-video {
 }
 
 .breadcrumb:before {
-  content: '\E5CC';
+  /*content: '\E5CC';*/
+  content: '>';
   color: rgba(255, 255, 255, 0.7);
   vertical-align: top;
   display: inline-block;
-  font-family: 'Material Icons';
+  /*font-family: 'Material Icons';*/
   font-weight: normal;
   font-style: normal;
   font-size: 25px;

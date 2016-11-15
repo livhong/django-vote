@@ -2,79 +2,105 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Article</title>
+    <title>{{ building.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
     <script src="http://apps.bdimg.com/libs/jquery/2.0.0/jquery.min.js"></script>
-    <script src="http://apps.bdimg.com/libs/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <script src="static/materialize/js/materialize.js"></script>
-
-    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/static/materialize/js/materialize.js"></script>
+{#    <link href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">#}
+    <link href="/static/materialize/css/materialize.css" rel="stylesheet">
+    <link href="/static/materialize/css/icon.css" rel="stylesheet">
+    <link href="/static/materialize/css/style.css" rel="stylesheet">
 </head>
 
+<body style="margin: 0;">
 
-<body style="margin: 0; background-color: beige;">
-<nav id="main-navbar" class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin: 0;">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display-->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-9">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+  <nav>
+    <div class="nav-wrapper">
+      <div class="col s12">
+        <a href="{% url 'polls:index' %}" class="breadcrumb">&nbsp;&nbsp;&nbsp;&nbsp;建筑列表</a>
+        <a href="{% url 'polls:detail' building.id %}" class="breadcrumb">{{ building.title }}</a>
+          <a href="#!" class="breadcrumb">{{ article.author }}</a>
+      </div>
+    </div>
+  </nav>
 
-            </button>
-            <a class="navbar-brand hidden-sm" href="{% url 'polls:detail' building.id %}" style="font-size: 130%;" ><span class="glyphicon glyphicon-chevron-left"></span></a>
+  <div class="col s12 m8 offset-m2 l6 offset-l3">
+    <div class="card-panel grey lighten-5 z-depth-1" style="padding: 10px;">
+      <div class="row valign-wrapper" style="margin-bottom: 0;">
+{#        <div class="col s2">#}
+{#          <img src="images/yuna.jpg" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->#}
+{#        </div>#}
+        <div class="col s12">
+          <span class="black-text">
+             <h5>{{ article.title }}</h5>
+            <blockquote style="margin-bottom: 3px;margin-top: 3px;padding-left: 5px;color: grey;">
+                作者:{{ article.author }} 时间：{{ article.pub_time }}
+            </blockquote>
+          </span>
+          <div>
+            当前票数统计：<span class="voteNum">{{ article.votes.count }}票</span>
+          </div>
         </div>
+      </div>
+    </div>
+      <div class="rich-content">
+          {{ article.content | safe }}
+      </div>
+  </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="{% url 'polls:sort_by_time' building.id %}"><div style="display: inline-block; text-align: center;"><br class="nl"> 按发表时间排行</div></a></li>
-                <li><a href="#"><div style="display: inline-block; text-align: center;"><br class="nl"> 按热度排行</div></a></li>
-                <li><a href="#"><div style="display: inline-block; text-align: center;"><br class="nl"> </div></a></li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
-<div id="articleDiv" style="clear: both; padding: 3px 1.5%;">
-    <div style="font-size: 100%; margin-top: 7px; margin-bottom: 7px; padding-left: 10px;">
-        作者:{{ article.author }}
-    </div>
-    <hr style="margin: 0;">
-    <div style="padding-bottom: 5px; margin-top: 5px;">
-        <div style="font-size: 120%; margin-left: 10px;">{{ article.title }}</div>
-        <div style="float: right;">{{ article.pub_time }}</div>
-        <hr>
-        <p style="clear:both; font-size: 100%; color: darkgray;">{{ article.content | safe }}</p>
-    </div>
-    <div class="result" style="vertical-align: baseline;">
-        <input class="voteButton"  name="button" id="{{ article.id }}"
-                {% if isVoted %}
-               type="button"
-               value="已投过"
-               disabled
-                {% else %}
-               type="image" src="/static/img/vote.png"
-               style=" height: 25px;display: inline-block;"
-                {% endif %}/><!-- 投票按钮,如果已经投过则失效 -->
-        <span style="font-size: medium;">
-            <span class="voteNum">{{ article.votes.count }}</span>票
-        </span>
-    </div>
-</div>
+  {% if building.is_after_ddl %}
+  {% else %}
+      <div class="fixed-action-btn">
+          {% if isVoted %}
+                <a class="btn-floating btn-large waves-effect waves-light grey"><i class="material-icons"><img src="/static/img/thumb_up.png" style="height:22px;width:22px;"></i></a>
+            {% else %}
+              <a class="btn-floating btn-large waves-effect waves-light red voteButton" id="{{ article.id }}"><i class="material-icons"><img src="/static/img/thumb_up.png" style="height:22px;width:22px;"></i></a>
+            {% endif %}
+        </div>
+  {% endif %}
+
+
+
+{#<div id="articleDiv" style="clear: both; padding: 3px 1.5%;">#}
+{#    <div style="font-size: 100%; margin-top: 7px; margin-bottom: 7px; padding-left: 10px;">#}
+{#        作者:{{ article.author }}#}
+{#    </div>#}
+{#    <hr style="margin: 0;">#}
+{#    <div style="padding-bottom: 5px; margin-top: 5px;">#}
+{#        <div style="font-size: 120%; margin-left: 10px;">{{ article.title }}</div>#}
+{#        <div style="float: right;">{{ article.pub_time }}</div>#}
+{#        <hr>#}
+{#        <p style="clear:both; font-size: 100%; color: darkgray;">{{ article.content | safe }}</p>#}
+{#    </div>#}
+{#    <div class="result" style="vertical-align: baseline;">#}
+{#        <input class="voteButton"  name="button" id="{{ article.id }}"#}
+{#                {% if isVoted %}#}
+{#               type="button"#}
+{#               value="已投过"#}
+{#               disabled#}
+{#                {% else %}#}
+{#               type="image" src="/static/img/vote.png"#}
+{#               style=" height: 25px;display: inline-block;"#}
+{#                {% endif %}/><!-- 投票按钮,如果已经投过则失效 -->#}
+{#        <span style="font-size: medium;">#}
+{#            <span class="voteNum">{{ article.votes.count }}</span>票#}
+{#        </span>#}
+{#    </div>#}
+{#</div>#}
 <script>
     $(".voteButton").click(function () {
         var parent = $(this).parent();
         $.get("/polls/" + $(this).attr("id") + "/outVote",
                 {}, function (txt) {
-
-                    var temp = '<input type="button" value="已投过" class="voteButton"  name="button" ' +
-                            'id="' + $(this).attr("id") + '"' +
-                            'value="已投过"disabled/>' +
-                            ' <span style="font-size: medium;"> <span class="voteNum">'+ txt +'</span>票</span>';
-                    parent.html(temp);
+                    var voteSpan = txt+'票';
+                   var tmp = '<a class="btn-floating btn-large waves-effect waves-light grey"><i class="material-icons">thumb_up</i></a>';
+{#                    var temp = '<input type="button" value="已投过" class="voteButton"  name="button" ' +#}
+{#                            'id="' + $(this).attr("id") + '"' +#}
+{#                            'value="已投过"disabled/>' +#}
+{#                            ' <span style="font-size: medium;"> <span class="voteNum">'+ txt +'</span>票</span>';#}
+                    parent.html(tmp);
+                    $('.voteNum').html(voteSpan);
                 });
     });
 </script>

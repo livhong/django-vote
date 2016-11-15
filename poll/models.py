@@ -39,8 +39,11 @@ class User(models.Model):
 
 class ActivityDetail(models.Model):
     #投稿方式可以编写在这里
+    theme = models.CharField(max_length=100, default="主页的标题")
     content = UEditorField(default="", toolbars="full", imagePath="ueditor/images/%(year)s/%(month)s/",
                            filePath="ueditor/file/%(year)s/%(month)s/")
+    def __str__(self):
+        return self.theme
 
 class Building(models.Model):
     title = models.CharField(max_length=1000)
@@ -59,7 +62,8 @@ class Building(models.Model):
 #     content = UEditorField(default="", toolbars="full", imagePath="ueditor/images/%(year)s/%(month)s/",
 #                            filePath="ueditor/file/%(year)s/%(month)s/")
 #     building = models.OneToOneField(Building)
-
+    def __str__(self):
+        return self.title
 
 class Option(models.Model):
     title = models.CharField(max_length=1000, default='')
@@ -72,5 +76,12 @@ class Option(models.Model):
                            filePath="ueditor/file/%(year)s/%(month)s/")
     votes = VotableManager()
     building = models.ForeignKey(Building)
+    def __str__(self):
+        return self.title
+
+    def count_vote(self):
+        return self.votes.count()
+    count_vote.allow_tags = True
+    count_vote.short_description = '投票数'
 
 

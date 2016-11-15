@@ -3,7 +3,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import *
 from django.core.urlresolvers import reverse
 from django.views import generic
-from django.views import View
 from django.utils import timezone
 from wx.base_view import InterceptorView as BaseView
 from .serializer import UserSerializer
@@ -52,7 +51,22 @@ def sort_by_heat(request, pk):
     userStr = request.session['user']
     user = UserSerializer.parse(userStr)
     building = Building.objects.filter(is_online=True, id=pk)[0]
-    articles = Option.objects.filter(building__id=building.id).order_by('count')
+    articles = Option.objects.filter(building__id=building.id)
+
+    # vote_count = []
+    # for article in articles:
+    #     vote_count.append(article.votes.count())
+    # building = [x for (y,x) in sorted(zip(vote_count, building))]
+
+    tmp = []
+    for article in articles:
+        tmp.append(article)
+    articles = tmp
+    articles.sort(
+        key = lambda x: x.votes.count(),
+        reverse = True
+    )
+
     isVotedList = []
     for article in articles:
         isVotedList.append(True if article.votes.exists(user.id) else False)
@@ -80,7 +94,6 @@ def sort_by_time(request, pk):
         'articles': zip(articles, isVotedList),
         'activity': activity
     })
-
 
 def outVote(request, pk):
     userStr = request.session['user']
@@ -137,7 +150,7 @@ class TitleView(generic.ListView):
 
 # DetailView represent display a detail page for a particular type of object
 #
-class DetailView(generic.View):
+class DetailView(BaseView):
 
     def get(self, request, pk):
         userStr = request.session['user']
@@ -156,7 +169,7 @@ class DetailView(generic.View):
         })
 
 
-class ArticleView(generic.View):
+class ArticleView(BaseView):
     def get(self, request, pk, ):
         userStr = request.session['user']
         user = UserSerializer.parse(userStr)
